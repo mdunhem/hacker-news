@@ -13,18 +13,32 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var detailDescriptionLabel: UILabel!
 
 
-    var detailItem: AnyObject? {
+    var detailItem: String? {
         didSet {
             // Update the view.
             self.configureView()
         }
     }
+    
+    var item: HNItem? {
+        didSet {
+            self.configureView()
+        }
+    }
 
     func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = self.detailItem {
-            if let label = self.detailDescriptionLabel {
-                label.text = detail.description
+        if let item = item {
+            if let label = detailDescriptionLabel {
+                if let text = item.text {
+                    label.text = text
+                } else if let url = item.url {
+                    label.text = url.absoluteString
+                } else {
+                    label.text = item.title!
+                }
+            }
+            if let descendants = item.descendants {
+                title = "\(descendants) comments"
             }
         }
     }
