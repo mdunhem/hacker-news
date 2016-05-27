@@ -90,7 +90,8 @@ extension NewsViewController : HackerNewsDelegate {
         case .Update:
             print("Update indexPath.row: \(indexPath.row)")
             if let cell = tableView.cellForRowAtIndexPath(indexPath) as? HackerNewsItemCell {
-                configure(cell, forIndexPath: indexPath)
+                cell.hackerNewsItem = hackerNews.item(at: index)
+//                configure(cell, forIndexPath: indexPath)
             }
         }
     }
@@ -99,6 +100,9 @@ extension NewsViewController : HackerNewsDelegate {
 extension NewsViewController : UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) as? HackerNewsItemCell {
+            cell.viewed = true
+        }
         let item = newsClient.item(at: indexPath.row)
         if let url = item?.url {
             let safariViewController = SFSafariViewController(URL: url)
@@ -124,7 +128,10 @@ extension NewsViewController : UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("HackerNewsItemCell", forIndexPath: indexPath) as! HackerNewsItemCell
-        configure(cell, forIndexPath: indexPath)
+        let item = newsClient.item(at: indexPath.row)
+        cell.hackerNewsItem = item
+        cell.commentsButton.indexPath = indexPath
+//        configure(cell, forIndexPath: indexPath)
         return cell
     }
     

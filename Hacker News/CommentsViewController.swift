@@ -16,6 +16,8 @@ class CommentsViewController: UIViewController {
             tableView.rowHeight = UITableViewAutomaticDimension
         }
     }
+    @IBOutlet var itemTextLabel: UILabel!
+    @IBOutlet var userLabel: UILabel!
     
     var item: HNItem? {
         didSet {
@@ -31,6 +33,12 @@ class CommentsViewController: UIViewController {
         if let item = item {
             title = "\(item.descendants ?? 0) comments"
             commentIDs = item.kids
+            if let itemTitle = item.title {
+                itemTextLabel?.text = itemTitle
+            }
+            if let itemUser = item.by {
+                userLabel?.text = itemUser
+            }
         }
     }
 
@@ -85,7 +93,8 @@ extension CommentsViewController : UITableViewDataSource {
     func configureCell(cell: CommentsTableViewCell, atIndexPath indexPath: NSIndexPath) {
         let comment = hackerNews.item(at: indexPath.section)
         if let commentText = comment?.text {
-            cell.commentTextLabel.text = commentText
+//            cell.commentTextLabel.text = commentText
+            cell.commentTextLabel.setHtml(commentText, forEncoding: NSUTF8StringEncoding)
         }
         
     }
@@ -98,5 +107,19 @@ extension CommentsViewController : HackerNewsDelegate {
     
     func hackerNews(hackerNews: HackerNews, didChangeItemAtIndex index: Int, forChangeType type: HackerNewsStoryChangeType) {
         tableView.reloadData()
+    }
+}
+
+
+extension UILabel {
+    func setHtml(html: String, forEncoding encoding: NSStringEncoding) {
+        let data = html.dataUsingEncoding(encoding)
+        let options = [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType]
+        do {
+            let attributedString = try NSAttributedString(data: data!, options: options, documentAttributes: nil)
+            self.attributedText = attributedString
+        } catch {
+            return
+        }
     }
 }
