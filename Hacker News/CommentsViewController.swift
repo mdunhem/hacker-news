@@ -116,7 +116,7 @@ extension UILabel {
         let data = html.dataUsingEncoding(encoding)
         let options = [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType]
         do {
-            let attributedString = try NSAttributedString(data: data!, options: options, documentAttributes: nil)
+            let attributedString = try NSMutableAttributedString(data: data!, options: options, documentAttributes: nil)
             self.attributedText = attributedString
         } catch {
             return
