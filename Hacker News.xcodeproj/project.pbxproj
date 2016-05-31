@@ -47,6 +47,7 @@
 		264AA4E01CFA8AE100B8D524 /* HackerNews.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = HackerNews.xcdatamodel; sourceTree = "<group>"; };
 		264AA4E21CFA936700B8D524 /* HackerNewsItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HackerNewsItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		264AA4E31CFA936700B8D524 /* HackerNewsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HackerNewsItem.swift; sourceTree = "<group>"; };
+		264AA4E81CFBF1B200B8D524 /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CoreDataTableViewController.swift; path = ../../../Downloads/CoreDataTableViewController.swift; sourceTree = "<group>"; };
 		26935ECB1CE8D93900EB9A99 /* Style.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		26935ECD1CE90D2C00EB9A99 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		26935ECF1CE9112600EB9A99 /* CommentsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableViewCell.swift; sourceTree = "<group>"; };
@@ -99,6 +100,7 @@
 			children = (
 				26A93AB21CDF9C0C00C9C631 /* Hacker News */,
 				26A93AB31CDF9C0C00C9C631 /* AppDelegate.swift */,
+				264AA4E81CFBF1B200B8D524 /* CoreDataTableViewController.swift */,
 				26A93AC91CDF9C0C00C9C631 /* Hacker NewsTests */,
 				26A93AB11CDF9C0C00C9C631 /* Products */,
 				86F8D55D8B9B311A50CDB0AB /* Frameworks */,

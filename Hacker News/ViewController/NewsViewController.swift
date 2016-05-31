@@ -8,6 +8,7 @@
 
 import UIKit
 import SafariServices
+import CoreData
 
 class NewsViewController: UIViewController, SequeHandlerType {
     
@@ -28,6 +29,10 @@ class NewsViewController: UIViewController, SequeHandlerType {
                 }
             }
         }
+    }
+    
+    private var managedObjectContext: NSManagedObjectContext? {
+        return (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -55,6 +60,7 @@ class NewsViewController: UIViewController, SequeHandlerType {
         
         title = "Hacker News"
         newsClient.delegate = self
+        newsClient.managedObjectContext = managedObjectContext
         newsClient.load(.TopStories)
         refreshControl.addTarget(self, action: #selector(refreshData), forControlEvents: .ValueChanged)
         tableView.addSubview(refreshControl)
@@ -103,12 +109,18 @@ extension NewsViewController : UITableViewDelegate {
         if let cell = tableView.cellForRowAtIndexPath(indexPath) as? HackerNewsItemCell {
             cell.viewed = true
         }
-        let item = newsClient.item(at: indexPath.row)
-        if let url = item?.url {
-            let safariViewController = SFSafariViewController(URL: url)
-            safariViewController.delegate = self
-            navigationController?.presentViewController(safariViewController, animated: true, completion: nil)
+        if let item = newsClient.item(at: indexPath.row) {
+            if let managedObjectContext = managedObjectContext {
+                _ = HackerNewsItem.setReadStatus(true, forHackerNewsItem: item.id, inManagedObjectContext: managedObjectContext)
+            }
+            if let url = item.url {
+                let safariViewController = SFSafariViewController(URL: url)
+                safariViewController.delegate = self
+                navigationController?.presentViewController(safariViewController, animated: true, completion: nil)
+            }
         }
+        
+        
     }
     
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -131,6 +143,12 @@ extension NewsViewController : UITableViewDataSource {
         let item = newsClient.item(at: indexPath.row)
         cell.hackerNewsItem = item
         cell.commentsButton.indexPath = indexPath
+        if let item = item, let managedObjectContext = managedObjectContext {
+            cell.viewed = HackerNewsItem.readStatusForHackerNewsItemWithID(item.id, inManagedObjectContext: managedObjectContext)
+        } else {
+            cell.viewed = false
+        }
+        
 //        configure(cell, forIndexPath: indexPath)
         return cell
     }

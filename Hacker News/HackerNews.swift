@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import CoreData
 
 protocol HackerNewsDelegate {
     func hackerNewsDidReturnNewStories(hackerNews: HackerNews)
@@ -35,7 +36,17 @@ class HackerNews {
         didSet {
             for item in fetchedItemIds {
                 getStory(item)
+                managedObjectContext?.performBlock {
+                    _ = HackerNewsItem.hackerNewsItemWithID(item, inManagedObjectContext: self.managedObjectContext!)
+                }
             }
+            do {
+                try managedObjectContext?.save()
+            } catch let error {
+                // TODO: Handle this error better
+                print("Core Data error: \(error)")
+            }
+
             delegate?.hackerNewsDidReturnNewStories(self)
         }
     }
@@ -62,6 +73,8 @@ class HackerNews {
     // MARK: Public API
     
     var delegate: HackerNewsDelegate?
+    
+    var managedObjectContext: NSManagedObjectContext?
     
     var numberOfItems: Int {
         return items.count
